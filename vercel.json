@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/temp_recib.html" }
+    {
+      "source": "/",
+      "destination": "/temp_recib.html"
+    }
   ]
 }
