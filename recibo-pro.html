@@ -25,7 +25,10 @@
         .hidden { display: none; }
         
         /* --- ESTILOS DO NOVO RECIBO PROFISSIONAL --- */
-        .receipt-pro { border: 1px solid #ccc; padding: 40px; font-family: 'Times New Roman', Times, serif; }
+        .receipt-pro { border: 1px solid #ccc; padding: 40px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 11pt; }
+        .receipt-pro h2, .pro-header .receipt-details { font-size: 12pt; }
+        .pro-section-content.amount-in-words { font-weight: 500; }
+
         .pro-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 20px; }
         .pro-header .logo-area img { max-width: 150px; max-height: 70px; }
         .pro-header .issuer-info { text-align: left; }
@@ -37,7 +40,7 @@
         .pro-section-title { font-weight: bold; display: block; width: 120px; float: left; }
         .pro-section-content { margin-left: 130px; }
         
-        .pro-observations { white-space: pre-wrap; } /* Para manter quebras de linha nas observações */
+        .pro-observations { white-space: pre-wrap; }
 
         .pro-footer { text-align: center; margin-top: 50px; }
         .pro-footer .signature-image-area img { max-height: 60px; margin-bottom: 5px; }
@@ -77,7 +80,7 @@
             
             var result = '';
             var mag = Math.floor(Math.log10(num) / 3);
-            if(mag === 0) return toWords(num); // This handles numbers like 500 correctly.
+            if(mag === 0) return toWords(num); 
 
             var factor = Math.pow(10, mag * 3);
             var high = Math.floor(num / factor);
@@ -232,7 +235,7 @@ Honorários advocatícios..."></textarea></div>
                             </div>
                             <div class="pro-section">
                                 <span class="pro-section-title">A quantia de:</span>
-                                <div class="pro-section-content">${amountInWords}</div>
+                                <div class="pro-section-content amount-in-words">${amountInWords}</div>
                             </div>
                             <div class="pro-section">
                                 <span class="pro-section-title">Referente a:</span>
