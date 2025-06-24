@@ -55,8 +55,69 @@
         }
     </style>
     <!-- Script do valor por extenso CORRIGIDO -->
+    <script>    <!-- Script do valor por extenso - VERSÃO FINAL CORRIGIDA -->
     <script>
-    var numero = (function () { "use strict"; var e = { 1: "um", 2: "dois", 3: "três", 4: "quatro", 5: "cinco", 6: "seis", 7: "sete", 8: "oito", 9: "nove", 10: "dez", 11: "onze", 12: "doze", 13: "treze", 14: "quatorze", 15: "quinze", 16: "dezesseis", 17: "dezessete", 18: "dezoito", 19: "dezenove", }, r = { 2: "vinte", 3: "trinta", 4: "quarenta", 5: "cinquenta", 6: "sessenta", 7: "setenta", 8: "oitenta", 9: "noventa", }, t = { 1: "cento", 2: "duzentos", 3: "trezentos", 4: "quatrocentos", 5: "quinhentos", 6: "seiscentos", 7: "setecentos", 8: "oitocentos", 9: "novecentos", }, n = { 1e3: "mil", 1e6: "milhão", 1e9: "bilhão", 1e12: "trilhão", 1e15: "quatrilhão", 1e18: "quintilhão", 1e21: "sextilhão", 1e24: "septilhão", 1e27: "octilhão", 1e30: "nonilhão", 1e33: "decilhão", 1e36: "undecilhão", 1e39: "duodecilhão", 1e42: "tredecilhão", 1e45: "quattuordecilhão", 1e48: "quindecilhão", 1e51: "sexdecilhão", 1e54: "septendecilhão", 1e57: "octodecilhão", 1e60: "novendecilhão", 1e63: "vigintilhão", }; function o(o) { var i, a, c, l, s; return (i = o), (a = parseInt(i[0])), (c = parseInt(i[1])), (l = e[o] || r[a]), (s = l ? "" + l + (c > 0 ? " e " + e[c] : "") : e[c]), s; } return { porExtenso: function (i, a) { var c, l, s, u, d, p, f, m, g, h, v, b, y, x, E, $, w, S, N, O, C, D, T, A = "string" == typeof i, B = A ? i.length > 1 && "," === i[i.length - 3] : ((i = i.toString()), -1 !== i.indexOf(".")), j = Object.assign( {}, { modo: "normal", real: "real", reais: "reais", centavo: "centavo", centavos: "centavos", }, a ), k = [[], []]; if ( A ? /=/.test(i) ? ((l = i.match(/^(.*?)=(.*)/)), (s = l[1]), (u = l[2])) : ((s = i), (u = null)) : (s = i), (d = parseInt(s.replace(/[^\d]/g, ""))), B ) { var M = A ? i.split(",") : i.split("."); k[1] = M[1].slice(0, 2).padEnd(2, "0"); } if (d) { if (d > 1e66) return "Número muito grande"; for ( f = (p = d.toString().split("").reverse()).length, m = Math.ceil(f / 3), g = 0; g < m; g++ ) k[0][g] = p.slice(3 * g, 3 * g + 3).reverse().join(""); for (h = "", g = m - 1; g >= 0; g--) { if (((v = k[0][g]), (b = parseInt(v)), b)) { if ( (y = n[Math.pow(10, 3 * g)]), (x = b >= 1e2), (E = m > 1 && g < m - 1 && g > 0), ($ = g > 0 && parseInt(k[0][g - 1]) > 0), (w = b > 1 && b < 2 && y), (S = b > 1 && y), (N = parseInt(v[0])), (O = parseInt(v.slice(1, 3))), (C = parseInt(v[1])), (D = parseInt(v[2])), (h += h.length > 0 ? (E || !y ? " e " : ", ") : ""), 1 === b && y) h += "mil"; else { if (100 === b) h += "cem"; else b > 100 ? (h += "" + t[N] + (O > 0 ? " e " + o(v.slice(1, 3)) : "")) : b > 19 ? (h += "" + r[C] + (D > 0 ? " e " + e[D] : "")) : (h += e[b]); y && (h += " " + y + (S ? "ões" : "")); } } } c = h.replace(/, $/, ""); } else c = "zero"; return "monetario" === j.modo ? ((O = parseInt(k[1]) || 0), (C = parseInt(d)), (T = c), (A = C > 1 ? j.reais : j.real), (B = O > 1 ? j.centavos : j.centavo), (i = "" + (C ? "" + T + " " + A : "") + (O ? "" + (C ? " e " : "") + o(k[1]) + " " + B : "")).trim()) : c; }, }; })();
+    var numero = (function () {
+        'use strict';
+        var e = { 1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco', 6: 'seis', 7: 'sete', 8: 'oito', 9: 'nove', 10: 'dez', 11: 'onze', 12: 'doze', 13: 'treze', 14: 'quatorze', 15: 'quinze', 16: 'dezesseis', 17: 'dezessete', 18: 'dezoito', 19: 'dezenove' };
+        var r = { 2: 'vinte', 3: 'trinta', 4: 'quarenta', 5: 'cinquenta', 6: 'sessenta', 7: 'setenta', 8: 'oitenta', 9: 'noventa' };
+        var t = { 1: 'cento', 2: 'duzentos', 3: 'trezentos', 4: 'quatrocentos', 5: 'quinhentos', 6: 'seiscentos', 7: 'setecentos', 8: 'oitocentos', 9: 'novecentos' };
+        var n = { 1e3: 'mil', 1e6: 'milhão', 1e9: 'bilhão' }; // Simplificado para escopos comuns
+
+        function o(o) {
+            var i = o[0], a = o[1];
+            return e[o] || (r[i] ? r[i] + (a > 0 ? ' e ' + e[a] : '') : e[a]);
+        }
+
+        function toWords(num) {
+            if (num === 0) return '';
+            if (num < 20) return e[num];
+            if (num < 100) return o(String(num));
+            if (num === 100) return 'cem';
+            if (num < 1000) return t[String(num)[0]] + (num % 100 ? ' e ' + toWords(num % 100) : '');
+            
+            var result = '';
+            var mag = Math.floor(Math.log10(num) / 3);
+            var factor = Math.pow(10, mag * 3);
+            var high = Math.floor(num / factor);
+            var remainder = num % factor;
+            
+            result += toWords(high) + ' ' + (high > 1 ? n[factor].replace('ão', 'ões') : n[factor]);
+            
+            if (remainder > 0) {
+                if (remainder < 100 || remainder % 100 === 0) {
+                    result += ' e ' + toWords(remainder);
+                } else {
+                    result += ', ' + toWords(remainder);
+                }
+            }
+            return result;
+        }
+
+        return {
+            porExtenso: function (i, a) {
+                var c, l, s, u = Object.assign({}, { modo: 'normal', real: 'real', reais: 'reais', centavo: 'centavo', centavos: 'centavos' }, a);
+                var d = String(i).replace(',', '.');
+                var p = d.split('.');
+                var f = parseInt(p[0]) || 0;
+                var m = parseInt((p[1] || '0').padEnd(2, '0')) || 0;
+
+                if (f === 0 && m === 0) return 'zero reais';
+
+                c = f > 0 ? toWords(f) : '';
+                l = m > 0 ? toWords(m) : '';
+
+                if ('monetario' === u.modo) {
+                    var g = f > 1 ? u.reais : u.real;
+                    var h = m > 1 ? u.centavos : u.centavo;
+                    s = (f > 0 ? c + ' ' + g : '') + (f > 0 && m > 0 ? ' e ' : '') + (m > 0 ? l + ' ' + h : '');
+                    return s.trim();
+                }
+                return (c + (f > 0 && l > 0 ? ' vírgula ' : '') + l).trim();
+            }
+        };
+    }());
+    </script>
     </script>
 </head>
 <body>
