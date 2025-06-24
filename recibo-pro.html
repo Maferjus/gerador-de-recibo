@@ -209,7 +209,12 @@ Honorários advocatícios..."></textarea></div>
                     }
 
                     const formattedAmount = amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-                    const amountInWords = numero.porExtenso(amount, { modo: "monetario" });
+                    
+                    // CORREÇÃO DA CAPITALIZAÇÃO
+                    let amountInWords = numero.porExtenso(amount, { modo: "monetario" });
+                    if (amountInWords) {
+                        amountInWords = amountInWords.charAt(0).toUpperCase() + amountInWords.slice(1);
+                    }
                     
                     receiptContent.innerHTML = `
                         <div class="pro-header">
