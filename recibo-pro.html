@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Recibo Profissional</title>
     <style>
+        :root {
+            --primary-color: #44604a;
+            --primary-color-hover: #3a523f;
+        }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f0f2f5; color: #1c1e21; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; margin: 0; box-sizing: border-box; }
         .container { background-color: #fff; padding: 30px 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, .1); max-width: 800px; width: 100%; }
-        h1 { text-align: center; color: #1877f2; margin-bottom: 25px; font-size: 24px; }
+        h1 { text-align: center; color: var(--primary-color); margin-bottom: 25px; font-size: 24px; }
         form { display: flex; flex-direction: column; gap: 20px; }
         fieldset { border: 1px solid #dddfe2; border-radius: 6px; padding: 20px; }
-        legend { font-weight: 700; color: #1877f2; padding: 0 10px; }
+        legend { font-weight: 700; color: var(--primary-color); padding: 0 10px; }
         .input-group { display: flex; flex-direction: column; gap: 5px; }
         label { font-weight: 600; color: #606770; font-size: 14px; }
         input, textarea, button { padding: 12px; border: 1px solid #dddfe2; border-radius: 6px; font-size: 16px; width: 100%; box-sizing: border-box; }
+        input[type="file"] { padding: 8px; }
         textarea { resize: vertical; min-height: 80px; }
-        button { background-color: #1877f2; color: #fff; border: none; font-weight: 700; cursor: pointer; transition: background-color .3s; margin-top: 10px; }
-        button:hover { background-color: #166fe5; }
+        button { background-color: var(--primary-color); color: #fff; border: none; font-weight: 700; cursor: pointer; transition: background-color .3s; margin-top: 10px; }
+        button:hover { background-color: var(--primary-color-hover); }
         .hidden { display: none; }
         
         /* --- ESTILOS DO NOVO RECIBO PROFISSIONAL --- */
@@ -28,14 +33,15 @@
         .pro-header .receipt-details div { margin-bottom: 10px; }
         .pro-header .receipt-details span { font-weight: bold; }
         
-        .pro-section { margin-bottom: 25px; }
+        .pro-section { margin-bottom: 25px; overflow: hidden; }
         .pro-section-title { font-weight: bold; display: block; width: 120px; float: left; }
         .pro-section-content { margin-left: 130px; }
         
         .pro-observations { white-space: pre-wrap; } /* Para manter quebras de linha nas observações */
 
         .pro-footer { text-align: center; margin-top: 50px; }
-        .pro-footer .signature-line { border-bottom: 1px solid #000; width: 350px; margin: 60px auto 5px auto; }
+        .pro-footer .signature-image-area img { max-height: 60px; margin-bottom: 5px; }
+        .pro-footer .signature-line { border-bottom: 1px solid #000; width: 350px; margin: 5px auto 5px auto; }
 
         .receipt-buttons { display: flex; gap: 15px; margin-top: 20px; }
         .secondary-button { background-color: #e4e6eb; color: #4b4f56; }
@@ -48,8 +54,10 @@
             .receipt-pro { border: none; padding: 0; }
         }
     </style>
-    <!-- Script do valor por extenso (preservado) -->
-    <script>!function(e,o){"object"==typeof exports&&"undefined"!=typeof module?module.exports=o():"function"==typeof define&&define.amd?define(o):e.numero=o()}(this,function(){"use strict";var e={1:"um",2:"dois",3:"três",4:"quatro",5:"cinco",6:"seis",7:"sete",8:"oito",9:"nove",10:"dez",11:"onze",12:"doze",13:"treze",14:"quatorze",15:"quinze",16:"dezesseis",17:"dezessete",18:"dezoito",19:"dezenove"},o={2:"vinte",3:"trinta",4:"quarenta",5:"cinquenta",6:"sessenta",7:"setenta",8:"oitenta",9:"noventa"},t={2:"duzentos",3:"trezentos",4:"quatrocentos",5:"quinhentos",6:"seiscentos",7:"setecentos",8:"oitocentos",9:"novecentos"},n={1e3:"mil",1e6:"milhão",1e9:"bilhão",1e12:"trilhão",1e15:"quatrilhão",1e18:"quintilhão",1e21:"sextilhão",1e24:"septilhão",1e27:"octilhão",e30:"nonilhão",e33:"decilhão",e36:"undecilhão",e39:"duodecilhão",e42:"tredecilhão",e45:"quattuordecilhão",e48:"quindecilhão",e51:"sexdecilhão",e54:"septendecilhão",e57:"octodecilhão",e60:"novendecilhão",e63:"vigintilhão"};function r(r){var i,a,l,s,u;return i=r,a=parseInt(i[0]),l=parseInt(i[1]),s=e[r]||o[a],u=s?`${s}${l>0?` e ${e[l]}`:""}`:e[l],u}return{porExtenso:function(i,a){var l,s,u,d,c,p,f,g,b,h,m,v,y,x,N,O,E,j,S,C,w,$,A,D,B,I,_,P,q="string"==typeof i,z=q?i.length>1&&","===i[i.length-3]:(i=i.toString(),-1!==i.indexOf(".")),T=Object.assign({},{modo:"normal",real:"real",reais:"reais",centavo:"centavo",centavos:"centavos"},a),k=[[],[]];if(q?/=/.test(i)?(s=i.match(/^(.*?)=(.*)/),u=s[1],d=s[2]):(u=i,d=null):u=i,c=parseInt(u.replace(/[^\d]/g,"")),z){var U=q?i.split(","):i.split(".");k[1]=U[1].slice(0,2).padEnd(2,"0")}if(c){if(c>1e66)return"Número muito grande";for(f=(p=c.toString().split("").reverse()).length,g=Math.ceil(f/3),b=0;b<g;b++)k[0][b]=p.slice(3*b,3*b+3).reverse().join("");for(h="",b=g-1;b>=0;b--){if(m=k[0][b],v=parseInt(m),v){if(y=n[Math.pow(10,3*b)],x=v>=1e6,N=g>1&&b<g-1&&b>0,O=b>0&&parseInt(k[0][b-1])>0,E=v>1&&b>1,j=parseInt(m[0]),S=parseInt(m.slice(1,3)),C=parseInt(m[1]),w=parseInt(m[2]),h+=h.length>0?" e ":"",1===v&&y)h+="mil";else{v>100?h+=[t[j],S?` e ${r(m.slice(1,3))}`:""].join(""):v>19?h+=`${o[C]}${w>0?` e ${e[w]}`:""}`:h+=e[v],y&&(h+=` ${y}${E?"ões":""}`)}}}A=h.replace(/ $/,E?"ões":"")}else A="zero";return"monetario"===T.modo?(D=parseInt(k[1])||0,B=parseInt(c),I=A,P=B>1?T.reais:T.real,_=D>1?T.centavos:T.centavo,l=`${B?`${I} ${P}`:""}${D?`${B?" e ":""}${r(k[1])} ${_}`:""}`.trim()):A}}});</script>
+    <!-- Script do valor por extenso CORRIGIDO -->
+    <script>
+    var numero = (function () { "use strict"; var e = { 1: "um", 2: "dois", 3: "três", 4: "quatro", 5: "cinco", 6: "seis", 7: "sete", 8: "oito", 9: "nove", 10: "dez", 11: "onze", 12: "doze", 13: "treze", 14: "quatorze", 15: "quinze", 16: "dezesseis", 17: "dezessete", 18: "dezoito", 19: "dezenove", }, r = { 2: "vinte", 3: "trinta", 4: "quarenta", 5: "cinquenta", 6: "sessenta", 7: "setenta", 8: "oitenta", 9: "noventa", }, t = { 1: "cento", 2: "duzentos", 3: "trezentos", 4: "quatrocentos", 5: "quinhentos", 6: "seiscentos", 7: "setecentos", 8: "oitocentos", 9: "novecentos", }, n = { 1e3: "mil", 1e6: "milhão", 1e9: "bilhão", 1e12: "trilhão", 1e15: "quatrilhão", 1e18: "quintilhão", 1e21: "sextilhão", 1e24: "septilhão", 1e27: "octilhão", 1e30: "nonilhão", 1e33: "decilhão", 1e36: "undecilhão", 1e39: "duodecilhão", 1e42: "tredecilhão", 1e45: "quattuordecilhão", 1e48: "quindecilhão", 1e51: "sexdecilhão", 1e54: "septendecilhão", 1e57: "octodecilhão", 1e60: "novendecilhão", 1e63: "vigintilhão", }; function o(o) { var i, a, c, l, s; return (i = o), (a = parseInt(i[0])), (c = parseInt(i[1])), (l = e[o] || r[a]), (s = l ? "" + l + (c > 0 ? " e " + e[c] : "") : e[c]), s; } return { porExtenso: function (i, a) { var c, l, s, u, d, p, f, m, g, h, v, b, y, x, E, $, w, S, N, O, C, D, T, A = "string" == typeof i, B = A ? i.length > 1 && "," === i[i.length - 3] : ((i = i.toString()), -1 !== i.indexOf(".")), j = Object.assign( {}, { modo: "normal", real: "real", reais: "reais", centavo: "centavo", centavos: "centavos", }, a ), k = [[], []]; if ( A ? /=/.test(i) ? ((l = i.match(/^(.*?)=(.*)/)), (s = l[1]), (u = l[2])) : ((s = i), (u = null)) : (s = i), (d = parseInt(s.replace(/[^\d]/g, ""))), B ) { var M = A ? i.split(",") : i.split("."); k[1] = M[1].slice(0, 2).padEnd(2, "0"); } if (d) { if (d > 1e66) return "Número muito grande"; for ( f = (p = d.toString().split("").reverse()).length, m = Math.ceil(f / 3), g = 0; g < m; g++ ) k[0][g] = p.slice(3 * g, 3 * g + 3).reverse().join(""); for (h = "", g = m - 1; g >= 0; g--) { if (((v = k[0][g]), (b = parseInt(v)), b)) { if ( (y = n[Math.pow(10, 3 * g)]), (x = b >= 1e2), (E = m > 1 && g < m - 1 && g > 0), ($ = g > 0 && parseInt(k[0][g - 1]) > 0), (w = b > 1 && b < 2 && y), (S = b > 1 && y), (N = parseInt(v[0])), (O = parseInt(v.slice(1, 3))), (C = parseInt(v[1])), (D = parseInt(v[2])), (h += h.length > 0 ? (E || !y ? " e " : ", ") : ""), 1 === b && y) h += "mil"; else { if (100 === b) h += "cem"; else b > 100 ? (h += "" + t[N] + (O > 0 ? " e " + o(v.slice(1, 3)) : "")) : b > 19 ? (h += "" + r[C] + (D > 0 ? " e " + e[D] : "")) : (h += e[b]); y && (h += " " + y + (S ? "ões" : "")); } } } c = h.replace(/, $/, ""); } else c = "zero"; return "monetario" === j.modo ? ((O = parseInt(k[1]) || 0), (C = parseInt(d)), (T = c), (A = C > 1 ? j.reais : j.real), (B = O > 1 ? j.centavos : j.centavo), (i = "" + (C ? "" + T + " " + A : "") + (O ? "" + (C ? " e " : "") + o(k[1]) + " " + B : "")).trim()) : c; }, }; })();
+    </script>
 </head>
 <body>
     <div class="container">
@@ -61,8 +69,9 @@
                     <legend>Informações do Emitente (Quem Recebe)</legend>
                     <div class="input-group"><label for="issuer-name">Nome Completo</label><input type="text" id="issuer-name" placeholder="Seu nome completo" required></div>
                     <div class="input-group"><label for="issuer-doc">CPF/CNPJ</label><input type="text" id="issuer-doc" placeholder="Seu CPF ou CNPJ" required></div>
-                    <div class="input-group"><label for="issuer-address">Endereço</label><input type="text" id="issuer-address" placeholder="Ex: Rua XV de Novembro, 228, 2º Andar - Liberdade"></div>
-                    <div class="input-group"><label for="logo-url">URL do Logo (Opcional)</label><input type="url" id="logo-url" placeholder="https://exemplo.com/logo.png"></div>
+                    <div class="input-group"><label for="issuer-address">Endereço</label><input type="text" id="issuer-address" placeholder="Ex: Rua XV de Novembro, 228, 2º Andar"></div>
+                    <div class="input-group"><label for="logo-file">Logo do Escritório (Opcional)</label><input type="file" id="logo-file" accept="image/*"></div>
+                    <div class="input-group"><label for="signature-file">Imagem da Assinatura (Opcional)</label><input type="file" id="signature-file" accept="image/*"></div>
                 </fieldset>
 
                 <fieldset>
@@ -74,7 +83,7 @@
 
                 <fieldset>
                     <legend>Detalhes do Recibo</legend>
-                    <div class="input-group"><label for="receipt-number">Número do Recibo</label><input type="number" id="receipt-number" value="1" required></div>
+                    <div class="input-group"><label for="receipt-number">Número do Recibo</label><input type="number" id="receipt-number" value="1" min="1" required></div>
                     <div class="input-group"><label for="amount">Valor (R$)</label><input type="text" id="amount" inputmode="decimal" placeholder="Ex: 2990,81" required></div>
                     <div class="input-group"><label for="description">Referente a</label><input type="text" id="description" placeholder="Ex: Prestação de serviços" required></div>
                     <div class="input-group"><label for="observations">Observações</label><textarea id="observations" placeholder="Ex: Pagamento em Transferência Bancária
@@ -97,7 +106,6 @@ Honorários advocatícios..."></textarea></div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Seleciona todos os elementos do DOM
             const formContainer = document.getElementById("form-container");
             const receiptForm = document.getElementById("receipt-form");
             const receiptOutput = document.getElementById("receipt-output");
@@ -105,100 +113,133 @@ Honorários advocatícios..."></textarea></div>
             const newReceiptButton = document.getElementById("new-receipt-button");
             const dateInput = document.getElementById("date");
 
-            // Define a data atual como padrão
             dateInput.valueAsDate = new Date();
 
             receiptForm.addEventListener("submit", (event) => {
                 event.preventDefault();
 
-                // Coleta de dados do Emitente
-                const issuerName = document.getElementById("issuer-name").value;
-                const issuerDoc = document.getElementById("issuer-doc").value;
-                const issuerAddress = document.getElementById("issuer-address").value;
-                const logoUrl = document.getElementById("logo-url").value;
+                const logoFile = document.getElementById('logo-file').files[0];
+                const signatureFile = document.getElementById('signature-file').files[0];
 
-                // Coleta de dados do Pagador
-                const payerName = document.getElementById("payer-name").value;
-                const payerDoc = document.getElementById("payer-doc").value;
-                const payerAddress = document.getElementById("payer-address").value;
-                
-                // Coleta de dados do Recibo
-                const receiptNumber = document.getElementById("receipt-number").value;
-                const amountValue = document.getElementById("amount").value.replace(",", ".");
-                const description = document.getElementById("description").value;
-                const observations = document.getElementById("observations").value;
-                const city = document.getElementById("city").value;
-                const date = new Date(dateInput.value + "T00:00:00");
+                const processFilesAndGenerateReceipt = (logoUrl = '', signatureUrl = '') => {
+                    const issuerName = document.getElementById("issuer-name").value;
+                    const issuerDoc = document.getElementById("issuer-doc").value;
+                    const issuerAddress = document.getElementById("issuer-address").value;
 
-                const amount = parseFloat(amountValue);
-                if (isNaN(amount)) {
-                    alert("Por favor, insira um valor numérico válido.");
+                    const payerName = document.getElementById("payer-name").value;
+                    const payerDoc = document.getElementById("payer-doc").value;
+                    const payerAddress = document.getElementById("payer-address").value;
+                    
+                    const receiptNumber = document.getElementById("receipt-number").value;
+                    const amountValue = document.getElementById("amount").value.replace(",", ".");
+                    const description = document.getElementById("description").value;
+                    const observations = document.getElementById("observations").value;
+                    const city = document.getElementById("city").value;
+                    const date = new Date(dateInput.value + "T00:00:00");
+
+                    const amount = parseFloat(amountValue);
+                    if (isNaN(amount)) {
+                        alert("Por favor, insira um valor numérico válido.");
+                        return;
+                    }
+
+                    const formattedAmount = amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+                    const amountInWords = numero.porExtenso(amount, { modo: "monetario", reais: 'reais', centavos: 'centavos' });
+                    
+                    receiptContent.innerHTML = `
+                        <div class="pro-header">
+                            <div class="issuer-info">
+                                ${logoUrl ? `<div class="logo-area"><img src="${logoUrl}" alt="Logo"></div>` : ''}
+                                <strong>${issuerName}</strong><br>
+                                ${issuerAddress}
+                            </div>
+                            <div class="receipt-details">
+                                <div>RECIBO N° <span>${receiptNumber}</span></div>
+                                <div>VALOR <span>${formattedAmount}</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pro-body">
+                            <div class="pro-section">
+                                <span class="pro-section-title">Recebido de:</span>
+                                <div class="pro-section-content">
+                                    <strong>${payerName}</strong><br>
+                                    ${payerDoc ? `CPF/CNPJ: ${payerDoc}<br>` : ''}
+                                    ${payerAddress ? `${payerAddress}` : ''}
+                                </div>
+                            </div>
+                            <div class="pro-section">
+                                <span class="pro-section-title">A quantia de:</span>
+                                <div class="pro-section-content">${amountInWords}</div>
+                            </div>
+                            <div class="pro-section">
+                                <span class="pro-section-title">Referente a:</span>
+                                <div class="pro-section-content">${description}</div>
+                            </div>
+                            ${observations ? `
+                            <div class="pro-section">
+                                <span class="pro-section-title">Observações:</span>
+                                <div class="pro-section-content pro-observations">${observations}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="pro-footer">
+                            <div>${city}, ${date.toLocaleDateString("pt-BR", {day: '2-digit'})} de ${date.toLocaleDateString("pt-BR", {month: 'long'})} de ${date.toLocaleDateString("pt-BR", {year: 'numeric'})}.</div>
+                            ${signatureUrl ? `<div class="signature-image-area"><img src="${signatureUrl}" alt="Assinatura"></div>` : '<div class="signature-line"></div>'}
+                            <div>${issuerName}</div>
+                            <div>CPF/CNPJ: ${issuerDoc}</div>
+                        </div>
+                    `;
+
+                    formContainer.classList.add("hidden");
+                    receiptOutput.classList.remove("hidden");
+                };
+
+                // Lógica para converter arquivos em URLs de dados
+                let logoReader = new FileReader();
+                let signatureReader = new FileReader();
+                let logoUrl = '';
+                let signatureUrl = '';
+
+                let filesToProcess = (logoFile ? 1 : 0) + (signatureFile ? 1 : 0);
+                if (filesToProcess === 0) {
+                    processFilesAndGenerateReceipt();
                     return;
                 }
 
-                // Formatação dos dados
-                const formattedDate = date.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
-                const formattedAmount = amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-                const amountInWords = numero.porExtenso(amount, { modo: "monetario", reais: 'reais', centavos: 'centavos' });
-                
-                // Monta o HTML do recibo
-                receiptContent.innerHTML = `
-                    <div class="pro-header">
-                        <div class="issuer-info">
-                            ${logoUrl ? `<div class="logo-area"><img src="${logoUrl}" alt="Logo"></div>` : ''}
-                            <strong>${issuerName}</strong><br>
-                            ${issuerAddress}
-                        </div>
-                        <div class="receipt-details">
-                            <div>RECIBO N° <span>${receiptNumber}</span></div>
-                            <div>VALOR <span>${formattedAmount}</span></div>
-                        </div>
-                    </div>
+                let filesProcessed = 0;
+                const onFileProcessed = () => {
+                    filesProcessed++;
+                    if (filesProcessed === filesToProcess) {
+                        processFilesAndGenerateReceipt(logoUrl, signatureUrl);
+                    }
+                };
 
-                    <div class="pro-body">
-                        <div class="pro-section">
-                            <span class="pro-section-title">Recebido de:</span>
-                            <div class="pro-section-content">
-                                <strong>${payerName}</strong><br>
-                                ${payerDoc ? `CPF/CNPJ: ${payerDoc}<br>` : ''}
-                                ${payerAddress ? `${payerAddress}` : ''}
-                            </div>
-                        </div>
-                        <div class="pro-section">
-                            <span class="pro-section-title">A quantia de:</span>
-                            <div class="pro-section-content">${amountInWords}</div>
-                        </div>
-                        <div class="pro-section">
-                            <span class="pro-section-title">Referente a:</span>
-                            <div class="pro-section-content">${description}</div>
-                        </div>
-                        ${observations ? `
-                        <div class="pro-section">
-                            <span class="pro-section-title">Observações:</span>
-                            <div class="pro-section-content pro-observations">${observations}</div>
-                        </div>
-                        ` : ''}
-                    </div>
+                if (logoFile) {
+                    logoReader.onload = function(e) {
+                        logoUrl = e.target.result;
+                        onFileProcessed();
+                    };
+                    logoReader.readAsDataURL(logoFile);
+                }
 
-                    <div class="pro-footer">
-                        <div>${city}, ${date.toLocaleDateString("pt-BR", {day: '2-digit'})} de ${date.toLocaleDateString("pt-BR", {month: 'long'})} de ${date.toLocaleDateString("pt-BR", {year: 'numeric'})}.</div>
-                        <div class="signature-line"></div>
-                        <div>${issuerName}</div>
-                        <div>CPF/CNPJ: ${issuerDoc}</div>
-                    </div>
-                `;
-
-                // Alterna a visibilidade dos containers
-                formContainer.classList.add("hidden");
-                receiptOutput.classList.remove("hidden");
+                if (signatureFile) {
+                    signatureReader.onload = function(e) {
+                        signatureUrl = e.target.result;
+                        onFileProcessed();
+                    };
+                    signatureReader.readAsDataURL(signatureFile);
+                }
             });
 
             newReceiptButton.addEventListener("click", () => {
                 receiptOutput.classList.add("hidden");
                 formContainer.classList.remove("hidden");
+                const receiptNumberInput = document.getElementById("receipt-number");
                 receiptForm.reset();
                 dateInput.valueAsDate = new Date();
-                document.getElementById("receipt-number").value = parseInt(receiptNumber.value) + 1; // Incrementa o número do recibo
+                receiptNumberInput.value = parseInt(receiptNumberInput.value) + 1;
             });
         });
     </script>
