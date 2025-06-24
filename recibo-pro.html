@@ -54,15 +54,14 @@
             .receipt-pro { border: none; padding: 0; }
         }
     </style>
-    <!-- Script do valor por extenso CORRIGIDO -->
-    <script>    <!-- Script do valor por extenso - VERSÃO FINAL CORRIGIDA -->
+    <!-- Script do valor por extenso - VERSÃO FINAL CORRIGIDA -->
     <script>
     var numero = (function () {
         'use strict';
         var e = { 1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco', 6: 'seis', 7: 'sete', 8: 'oito', 9: 'nove', 10: 'dez', 11: 'onze', 12: 'doze', 13: 'treze', 14: 'quatorze', 15: 'quinze', 16: 'dezesseis', 17: 'dezessete', 18: 'dezoito', 19: 'dezenove' };
         var r = { 2: 'vinte', 3: 'trinta', 4: 'quarenta', 5: 'cinquenta', 6: 'sessenta', 7: 'setenta', 8: 'oitenta', 9: 'noventa' };
         var t = { 1: 'cento', 2: 'duzentos', 3: 'trezentos', 4: 'quatrocentos', 5: 'quinhentos', 6: 'seiscentos', 7: 'setecentos', 8: 'oitocentos', 9: 'novecentos' };
-        var n = { 1e3: 'mil', 1e6: 'milhão', 1e9: 'bilhão' }; // Simplificado para escopos comuns
+        var n = { 1e3: 'mil', 1e6: 'milhão', 1e9: 'bilhão' };
 
         function o(o) {
             var i = o[0], a = o[1];
@@ -78,14 +77,17 @@
             
             var result = '';
             var mag = Math.floor(Math.log10(num) / 3);
+            if(mag === 0) return toWords(num); // This handles numbers like 500 correctly.
+
             var factor = Math.pow(10, mag * 3);
             var high = Math.floor(num / factor);
             var remainder = num % factor;
             
-            result += toWords(high) + ' ' + (high > 1 ? n[factor].replace('ão', 'ões') : n[factor]);
+            var highWords = toWords(high);
+            result += highWords + ' ' + (high > 1 ? n[factor].replace('ão', 'ões') : n[factor]);
             
             if (remainder > 0) {
-                if (remainder < 100 || remainder % 100 === 0) {
+                 if (remainder < 100 || remainder % 100 === 0) {
                     result += ' e ' + toWords(remainder);
                 } else {
                     result += ', ' + toWords(remainder);
@@ -108,8 +110,8 @@
                 l = m > 0 ? toWords(m) : '';
 
                 if ('monetario' === u.modo) {
-                    var g = f > 1 ? u.reais : u.real;
-                    var h = m > 1 ? u.centavos : u.centavo;
+                    var g = f !== 1 ? u.reais : u.real;
+                    var h = m !== 1 ? u.centavos : u.centavo;
                     s = (f > 0 ? c + ' ' + g : '') + (f > 0 && m > 0 ? ' e ' : '') + (m > 0 ? l + ' ' + h : '');
                     return s.trim();
                 }
@@ -117,7 +119,6 @@
             }
         };
     }());
-    </script>
     </script>
 </head>
 <body>
@@ -205,7 +206,7 @@ Honorários advocatícios..."></textarea></div>
                     }
 
                     const formattedAmount = amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-                    const amountInWords = numero.porExtenso(amount, { modo: "monetario", reais: 'reais', centavos: 'centavos' });
+                    const amountInWords = numero.porExtenso(amount, { modo: "monetario" });
                     
                     receiptContent.innerHTML = `
                         <div class="pro-header">
@@ -257,19 +258,16 @@ Honorários advocatícios..."></textarea></div>
                     receiptOutput.classList.remove("hidden");
                 };
 
-                // Lógica para converter arquivos em URLs de dados
-                let logoReader = new FileReader();
-                let signatureReader = new FileReader();
-                let logoUrl = '';
-                let signatureUrl = '';
-
                 let filesToProcess = (logoFile ? 1 : 0) + (signatureFile ? 1 : 0);
                 if (filesToProcess === 0) {
                     processFilesAndGenerateReceipt();
                     return;
                 }
-
+                
+                let logoUrl = '';
+                let signatureUrl = '';
                 let filesProcessed = 0;
+                
                 const onFileProcessed = () => {
                     filesProcessed++;
                     if (filesProcessed === filesToProcess) {
@@ -278,6 +276,7 @@ Honorários advocatícios..."></textarea></div>
                 };
 
                 if (logoFile) {
+                    let logoReader = new FileReader();
                     logoReader.onload = function(e) {
                         logoUrl = e.target.result;
                         onFileProcessed();
@@ -286,6 +285,7 @@ Honorários advocatícios..."></textarea></div>
                 }
 
                 if (signatureFile) {
+                    let signatureReader = new FileReader();
                     signatureReader.onload = function(e) {
                         signatureUrl = e.target.result;
                         onFileProcessed();
@@ -295,12 +295,13 @@ Honorários advocatícios..."></textarea></div>
             });
 
             newReceiptButton.addEventListener("click", () => {
-                receiptOutput.classList.add("hidden");
-                formContainer.classList.remove("hidden");
                 const receiptNumberInput = document.getElementById("receipt-number");
+                const currentNumber = parseInt(receiptNumberInput.value);
                 receiptForm.reset();
                 dateInput.valueAsDate = new Date();
-                receiptNumberInput.value = parseInt(receiptNumberInput.value) + 1;
+                receiptNumberInput.value = currentNumber + 1;
+                receiptOutput.classList.add("hidden");
+                formContainer.classList.remove("hidden");
             });
         });
     </script>
